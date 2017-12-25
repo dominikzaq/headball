@@ -19,4 +19,8 @@ public class Result {
     public void setResultPlayer2(int resultPlayer2) {
         this.resultPlayer2 = resultPlayer2;
     }
+
+    public void saveResult() {
+
+    }
 }
