@@ -7,12 +7,7 @@ public class Ball {
     private Circle ball;
     private int ballRadius = 20;
 
-    private int positionX;
-    private int positionY;
-    private int velocityBallX;
-    private int velocityBallY;
-
-    int [] positionBall =  {900/2,550};
+    int [] positionBall =  {900/2,550}; //first element x, second element y
 
     /*
      * creating ball
@@ -23,20 +18,10 @@ public class Ball {
         ball.setCenterY(positionBall[1]);
         ball.setRadius(ballRadius);
         ball.setFill(Color.BLUE);
-        initPosition();
-    }
-
-    public void initPosition() {
-        positionX = 100;
-        positionY = 200;
     }
 
     public Circle getBall() {
         return ball;
-    }
-
-    public void setBall(Circle ball) {
-        this.ball = ball;
     }
 
     public void initFaillingBall() {

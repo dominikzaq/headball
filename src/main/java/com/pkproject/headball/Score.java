@@ -1,6 +1,8 @@
 package com.pkproject.headball;
 
-public class Result {
+public class Score {
+
+    public static int i = 0;
     int resultPlayer1;
     int resultPlayer2;
 
@@ -20,7 +22,10 @@ public class Result {
         this.resultPlayer2 = resultPlayer2;
     }
 
-    public void saveResult() {
-
+    // if false game is not complete otherwise the end game
+    public boolean checkEndGame() {
+        return i > 4;
     }
+
+    public void saveResult() { }
 }
