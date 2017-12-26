@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -46,6 +47,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         root.getChildren().add(canvas);
 
         root.getChildren().add(ball.getBall());
+
         gc = canvas.getGraphicsContext2D();
 
 
@@ -60,7 +62,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     }
 
     public void initBall() {
-        ball = new Ball(Settings.POSITIONBALL2X, Settings.POSITIONPLAYER2Y);
+        ball = new Ball(Settings.POSITIONBALL2X, Settings.POSITIONBALL1Y);
         ball.initBall();
     }
 
@@ -68,7 +70,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     public void initPlayers() {
         player = new Player[2];
         player[0] = new Player(Settings.URL, Settings.POSITIONPLAYER1X, Settings.POSITIONPLAYER1Y);
-        player[1] = new Player(Settings.URL,Settings.POSITIONPLAYER1X, Settings.POSITIONPLAYER1Y);
+        player[1] = new Player(Settings.URL,Settings.POSITIONPLAYER2X, Settings.POSITIONPLAYER2Y);
     }
 
     private class MyTimer extends AnimationTimer {
@@ -81,12 +83,21 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         public void doHandle() {
             player[0].checkBorder();
             player[1].checkBorder();
+
+            gc.setFill( Color.BLACK );
+            gc.fillRect(0,0, Settings.FRAMEWIDTH,Settings.FRAMEHEIGHT);
+
             gc.drawImage(player[0].getImage(),player[0].getPositionX(),player[0].getPositionY());
             gc.drawImage(player[1].getImage(),player[1].getPositionX(),player[1].getPositionY());
 
              //ball.setCenterX(10);
             //ball.setCenterY();
         }
+    }
+
+
+    void checkCollisions() {
+
     }
 
     private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {

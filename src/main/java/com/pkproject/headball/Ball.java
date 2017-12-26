@@ -33,4 +33,17 @@ public class Ball {
     public void initFaillingBall() {
 
     }
+
+    public void setCenterX(int positionX) {
+        positionBall[0] = positionX;
+    }
+
+    public void setCenterY(int positionY) {
+        positionBall[1] = positionY;
+    }
+
+    public void speedBall() {
+
+    }
+
 }
