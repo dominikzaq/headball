@@ -42,7 +42,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         Scene scene = new Scene(root);
         stage.setScene(scene);
 
-        canvas = new Canvas( Settings.FRAMEHEIGHT, Settings.FRAMEWIDTH);
+        canvas = new Canvas(Settings.FRAMEWIDTH, Settings.FRAMEHEIGHT);
         root.getChildren().add(canvas);
 
         root.getChildren().add(ball.getBall());
@@ -60,19 +60,17 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     }
 
     public void initBall() {
-        ball = new Ball();
+        ball = new Ball(Settings.POSITIONBALL2X, Settings.POSITIONPLAYER2Y);
         ball.initBall();
     }
 
-    public void initCanvas() {
-
-    }
 
     public void initPlayers() {
         player = new Player[2];
         player[0] = new Player(Settings.URL, Settings.POSITIONPLAYER1X, Settings.POSITIONPLAYER1Y);
         player[1] = new Player(Settings.URL,Settings.POSITIONPLAYER1X, Settings.POSITIONPLAYER1Y);
     }
+
     private class MyTimer extends AnimationTimer {
 
         @Override
@@ -86,11 +84,10 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
             gc.drawImage(player[0].getImage(),player[0].getPositionX(),player[0].getPositionY());
             gc.drawImage(player[1].getImage(),player[1].getPositionX(),player[1].getPositionY());
 
-            // ball.setCenterX(10);
-          //  ball.setCenterY(Ball.positionY);
+             //ball.setCenterX(10);
+            //ball.setCenterY();
         }
     }
-
 
     private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
 
@@ -109,7 +106,6 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
             }
         }
     };
-
 
 
     private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {

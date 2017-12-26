@@ -7,11 +7,17 @@ public class Ball {
     private Circle ball;
     private int ballRadius = 20;
 
-    int [] positionBall =  {900/2,550}; //first element x, second element y
+    int [] positionBall =  new int[2]; //first position of element x, second position of element y
 
     /*
      * creating ball
      */
+
+    public Ball(int positionX, int positionY) {
+        positionBall[0] = positionX;
+        positionBall[1] = positionY;
+    }
+
     public void initBall() {
         ball = new Circle();
         ball.setCenterX(positionBall[0]);

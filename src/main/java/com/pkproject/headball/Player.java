@@ -62,7 +62,7 @@ public class Player {
     }
 
     public void checkBorder() {
-        positionX = positionX > Settings.FRAMEWIDTH? positionX-Settings.velocityX :
-                positionX < 0?positionX+Settings.velocityX: positionX;
+        positionX = positionX > Settings.FRAMEHEIGHT? positionX-Settings.VECOLITYPLAYERX :
+                positionX < 0?positionX+Settings.VECOLITYPLAYERX: positionX;
     }
 }
