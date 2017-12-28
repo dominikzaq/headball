@@ -1,5 +1,8 @@
 package com.pkproject.headball;
 
-public interface Border {
 
+public interface Border {
+    void checkCollisionWithFrame();
+    void checkCollisionWithBall();
 }
+

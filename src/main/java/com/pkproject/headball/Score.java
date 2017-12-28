@@ -2,7 +2,7 @@ package com.pkproject.headball;
 
 public class Score {
 
-    public static int i = 0;
+    public static int countScore = 0;
     int resultPlayer1;
     int resultPlayer2;
 
@@ -24,7 +24,7 @@ public class Score {
 
     // if false game is not complete otherwise the end game
     public boolean checkEndGame() {
-        return i > 4;
+        return countScore > 4;
     }
 
     public void saveResult() { }

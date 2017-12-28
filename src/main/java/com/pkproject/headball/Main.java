@@ -8,27 +8,19 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 
 public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private Canvas canvas;
     private Group root;
-    private Player [] player;
     private Ball ball;
-
     private GraphicsContext gc;
+    private Player[] players;
 
     @Override
     public void start(Stage stage) throws FileNotFoundException {
@@ -46,10 +38,12 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         canvas = new Canvas(Settings.FRAMEWIDTH, Settings.FRAMEHEIGHT);
         root.getChildren().add(canvas);
 
+        root.getChildren().add(players[0].getBall());
+        root.getChildren().add(players[1].getBall());
+
         root.getChildren().add(ball.getBall());
 
         gc = canvas.getGraphicsContext2D();
-
 
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
@@ -57,6 +51,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         //start game
         AnimationTimer timer = new MyTimer();
         timer.start();
+
 
         stage.show();
     }
@@ -68,9 +63,11 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
 
 
     public void initPlayers() {
-        player = new Player[2];
-        player[0] = new Player(Settings.URL, Settings.POSITIONPLAYER1X, Settings.POSITIONPLAYER1Y);
-        player[1] = new Player(Settings.URL,Settings.POSITIONPLAYER2X, Settings.POSITIONPLAYER2Y);
+        players = new Player[2];
+        players[0] = new Player(Settings.POSITIONPLAYER1X, Settings.POSITIONPLAYER1Y);
+        players[1] = new Player(Settings.POSITIONPLAYER2X, Settings.POSITIONPLAYER2Y);
+        players[0].initBall();
+        players[1].initBall();
     }
 
     private class MyTimer extends AnimationTimer {
@@ -81,58 +78,58 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         }
 
         public void doHandle() {
-            player[0].checkBorder();
-            player[1].checkBorder();
 
-            gc.setFill( Color.BLACK );
+
+            gc.setFill( Color.GREEN);
             gc.fillRect(0,0, Settings.FRAMEWIDTH,Settings.FRAMEHEIGHT);
 
-            gc.drawImage(player[0].getImage(),player[0].getPositionX(),player[0].getPositionY());
-            gc.drawImage(player[1].getImage(),player[1].getPositionX(),player[1].getPositionY());
+          //  gc.drawImage(player[0].getImage(),player[0].getPositionX(),player[0].getPositionY());
+          //  gc.drawImage(player[1].getImage(),player[1].getPositionX(),player[1].getPositionY());
 
              //ball.setCenterX(10);
             //ball.setCenterY();
+
+            checkCollisions();
         }
     }
 
 
     void checkCollisions() {
-
+        //players[0].checkBorder();
+       // players[1].checkBorder();
     }
 
-    private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
+    private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
 
         @Override
         public void handle(KeyEvent event) {
+
             switch (event.getCode()) {
-                case W: player[0].moveElementUP(Settings.VECOLITYPLAYERX, Settings.VECOLITYPLAYERY); break;
-                case A: player[0].moveElementLeft(Settings.VECOLITYPLAYERX, Settings.VECOLITYPLAYERY);break;
-                case D: player[0].moveElementRight(Settings.VECOLITYPLAYERX, Settings.VECOLITYPLAYERY);break;
+                case W: players[0].moveElementY(Settings.VECOLITYPLAYERY); break;
+                case A: players[0].moveElementX(Settings.VECOLITYPLAYERY);break;
+                case D: players[0].moveElementX(-Settings.VECOLITYPLAYERY);break;
+                case S: players[0].moveElementY(-Settings.VECOLITYPLAYERY);break;
                 case SPACE: break;
 
-                case UP: player[1].moveElementUP(Settings.VECOLITYPLAYERX, Settings.VECOLITYPLAYERY);break;
-                case LEFT: player[1].moveElementLeft(Settings.VECOLITYPLAYERX, Settings.VECOLITYPLAYERY);break;
-                case RIGHT: player[1].moveElementRight(Settings.VECOLITYPLAYERX, Settings.VECOLITYPLAYERY);break;
+                case UP: players[1].moveElementY(Settings.VECOLITYPLAYERY);break;
+                case LEFT: players[1].moveElementX(Settings.VECOLITYPLAYERX);break;
+                case RIGHT: players[1].moveElementX(-Settings.VECOLITYPLAYERX);break;
+                case DOWN: players[1].moveElementY(-Settings.VECOLITYPLAYERY);break;
                 case P: break;
             }
         }
     };
 
 
-    private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
+    private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
 
         @Override
         public void handle(KeyEvent event) {
             switch (event.getCode()) {
-                case W: player[0].moveElementUP(Settings.VECOLITYPLAYERX, -Settings.VECOLITYPLAYERY); break;
-                case A: player[0].moveElementLeft(0, 0);break;
-                case D: player[0].moveElementRight(0, 0);break;
-                case SPACE: break;
 
-                case UP: player[1].moveElementUP(Settings.VECOLITYPLAYERX, -Settings.VECOLITYPLAYERY);break;
-                case LEFT: player[1].moveElementLeft(0, 0);break;
-                case RIGHT: player[1].moveElementRight(0, 0);break;
-                case P: break;
+
+              //  case W: testPlayers[0].moveElementY(-Settings.VECOLITYPLAYERY); break;
+             //   case UP: testPlayers[1].moveElementY(-Settings.VECOLITYPLAYERY);break;
             }
         }
     };

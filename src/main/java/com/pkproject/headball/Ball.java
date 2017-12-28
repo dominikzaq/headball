@@ -3,7 +3,7 @@ package com.pkproject.headball;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Ball {
+public class Ball implements Border{
     private Circle ball;
     private int ballRadius = 20;
 
@@ -46,4 +46,19 @@ public class Ball {
 
     }
 
+    public boolean isGoal() {
+        return false;
+    }
+
+    @Override
+    public void checkCollisionWithFrame() {
+       // if(positionBall) {
+
+       // }
+    }
+
+    @Override
+    public void checkCollisionWithBall() {
+
+    }
 }

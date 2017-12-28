@@ -1,68 +1,75 @@
 package com.pkproject.headball;
 
-import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
-public class Player {
-    private String namePlayer;
-    private int positionX;
-    private int positionY;
-    private Score result;
-    private Image image;
+public class Player implements Border{
+    private Circle ball;
+    private int ballRadius = 35;
 
-    public Player(String url, int positionX, int positionY) {
-        this.positionX = positionX;
-        this.positionY = positionY;
-        image = new Image(url);
+    int[] positionPlayer = new int[2]; //first position of element x, second position of element y
+
+    /*
+     * creating ball
+     */
+
+    public Player(int positionX, int positionY) {
+        positionPlayer[0] = positionX;
+        positionPlayer[1] = positionY;
     }
 
-    public String getNamePlayer() {
-        return namePlayer;
+    public void initBall() {
+        ball = new Circle();
+        ball.setCenterX(positionPlayer[0]);
+        ball.setCenterY(positionPlayer[1]);
+        ball.setRadius(ballRadius);
+        ball.setFill(Color.RED);
     }
 
-    public void setNamePlayer(String namePlayer) {
-        this.namePlayer = namePlayer;
+    public Circle getBall() {
+        return ball;
     }
 
-    public int getPositionX() {
-        return positionX;
+    public void initFaillingBall() {
+
     }
 
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
+    public void setCenterX(int positionX) {
+        positionPlayer[0] = positionX;
     }
 
-    public int getPositionY() {
-        return positionY;
+    public void setCenterY(int positionY) {
+        positionPlayer[1] = positionY;
     }
 
-    public Score getResult() {
-        return result;
+    public void speedBall() {
     }
 
-    public void setResult(Score result) {
-        this.result = result;
+    public void moveElementY(int y) {
+       // checkCollisionWithFrame(y);
+        positionPlayer[1] -= y;
+
+        ball.setCenterY(positionPlayer[1]);
     }
 
-    public Image getImage() {
-        return image;
+    public void moveElementX(int x) {
+        positionPlayer[0] -= x;
+
+       //checkCollisionWithFrame
+
+        ball.setCenterX(positionPlayer[0]);
     }
 
-    public void moveElementUP(int x, int y) {
-        positionX += 0;
-        positionY -= y;
+
+    @Override
+    public void checkCollisionWithFrame() {
+       // if(positionPlayer[0] -  >=) {
+
+       // }
     }
 
-    public void moveElementLeft(int x, int y) {
-        positionX -= x;
-        positionY += 0;
-    }
-    public void moveElementRight(int x, int y) {
-        positionX += x;
-        positionY += 0;
-    }
+    @Override
+    public void checkCollisionWithBall() {
 
-    public void checkBorder() {
-        positionX = positionX > Settings.FRAMEHEIGHT? positionX-Settings.VECOLITYPLAYERX :
-                positionX < 0?positionX+Settings.VECOLITYPLAYERX: positionX;
     }
 }
