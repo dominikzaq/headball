@@ -3,7 +3,9 @@ package com.pkproject.headball;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Ball implements Border{
+import javax.swing.text.GapContent;
+
+public class Ball  implements Border{
     private Circle ball;
     private int ballRadius = 20;
 
@@ -23,7 +25,7 @@ public class Ball implements Border{
         ball.setCenterX(positionBall[0]);
         ball.setCenterY(positionBall[1]);
         ball.setRadius(ballRadius);
-        ball.setFill(Color.BLUE);
+        ball.setFill(Color.WHITE);
     }
 
     public Circle getBall() {
@@ -48,6 +50,14 @@ public class Ball implements Border{
 
     public boolean isGoal() {
         return false;
+    }
+
+    public int[] getPositionBall() {
+        return positionBall;
+    }
+
+    public void setPositionBall(int[] positionBall) {
+        this.positionBall = positionBall;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.pkproject.headball;
 
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -21,6 +23,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private Ball ball;
     private GraphicsContext gc;
     private Player[] players;
+    private Frame frame;
 
     @Override
     public void start(Stage stage) throws FileNotFoundException {
@@ -40,32 +43,42 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
 
         root.getChildren().add(players[0].getBall());
         root.getChildren().add(players[1].getBall());
-
         root.getChildren().add(ball.getBall());
+
+
+        frame = new Frame();
+        root.getChildren().add(frame.getLine());
+        root.getChildren().add(frame.getLeftGoal());
+        root.getChildren().add(frame.getRightGoal());
 
         gc = canvas.getGraphicsContext2D();
 
         scene.setOnKeyPressed(keyPressed);
         scene.setOnKeyReleased(keyReleased);
 
+
         //start game
         AnimationTimer timer = new MyTimer();
         timer.start();
 
+       // Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3),
+               // new KeyValue(ball.getPositionBall()[0], ball.getPositionBall()[0]));
+        //timeline.setCycleCount(2);
+        //timeline.play();
 
         stage.show();
     }
 
     public void initBall() {
-        ball = new Ball(Settings.POSITIONBALL2X, Settings.POSITIONBALL1Y);
+        ball = new Ball(Settings.POSITIONBALLX, Settings.POSITIONBALLY);
         ball.initBall();
     }
 
 
     public void initPlayers() {
         players = new Player[2];
-        players[0] = new Player(Settings.POSITIONPLAYER1X, Settings.POSITIONPLAYER1Y);
-        players[1] = new Player(Settings.POSITIONPLAYER2X, Settings.POSITIONPLAYER2Y);
+        players[0] = new Player(Settings.POSITIONPLAYER1X, Settings.POSITIONPLAYER1Y, Color.RED);
+        players[1] = new Player(Settings.POSITIONPLAYER2X, Settings.POSITIONPLAYER2Y, Color.BLUE);
         players[0].initBall();
         players[1].initBall();
     }
