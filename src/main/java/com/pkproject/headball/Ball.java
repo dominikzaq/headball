@@ -5,12 +5,12 @@ import javafx.scene.shape.Circle;
 
 import javax.swing.text.GapContent;
 
-public class Ball  implements Border{
+public class Ball {
     private Circle ball;
     private int ballRadius = 20;
-
     int [] positionBall =  new int[2]; //first position of element x, second position of element y
-
+    boolean movingRight = true;
+    boolean movingDown = true;
     /*
      * creating ball
      */
@@ -36,14 +36,6 @@ public class Ball  implements Border{
 
     }
 
-    public void setCenterX(int positionX) {
-        positionBall[0] = positionX;
-    }
-
-    public void setCenterY(int positionY) {
-        positionBall[1] = positionY;
-    }
-
     public void speedBall() {
 
     }
@@ -60,15 +52,44 @@ public class Ball  implements Border{
         this.positionBall = positionBall;
     }
 
-    @Override
-    public void checkCollisionWithFrame() {
-       // if(positionBall) {
-
-       // }
+    public void moveBall(int x, int y) {
+        positionBall[0] += x;
+        positionBall[1] += y;
+        checkCollisionWithFrame(x, y);
+        ball.setCenterX(positionBall[0]);
+        ball.setCenterY(positionBall[1]);
     }
 
-    @Override
+
+    public void checkCollisionWithFrame(int x, int y) {
+        if(positionBall[0] <= 0) positionBall[0] -= x;
+        if(positionBall[0] >= Settings.FRAMEWIDTH) positionBall[0] -= x;
+        if(positionBall[1] <= 0) positionBall[0] -= y;
+        if(positionBall[1] >= Settings.FRAMEHEIGHT) positionBall[0] -= y;
+    }
+
+    public boolean isMovingRight() {
+        return movingRight;
+    }
+
+    public void setMovingRight(boolean movingRight) {
+        this.movingRight = movingRight;
+    }
+
+    public boolean isMovingDown() {
+        return movingDown;
+    }
+
+    public void setMovingDown(boolean movingDown) {
+        this.movingDown = movingDown;
+    }
+
+    //@Override
     public void checkCollisionWithBall() {
+
+    }
+
+    public void doRotate(Player player) {
 
     }
 }

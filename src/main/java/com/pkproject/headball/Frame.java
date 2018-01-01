@@ -16,8 +16,8 @@ public class Frame {
 
 
     public void init() {
-        leftGoal = new Rectangle(0,0,50,200);
-        rightGoal = new Rectangle(250,250, 200,  250);
+        leftGoal = new Rectangle(SettingsFrame.LEFTPOSITIONRECTANGLEX,SettingsFrame.LEFTPOSITIONRECTANGLEY,SettingsFrame.GOALWIDTHRECTANGLE,SettingsFrame.GOALHEIGHTRECTANGLE);
+        rightGoal = new Rectangle(SettingsFrame.RIGHTPOSITIONRECTANGLEX,SettingsFrame.RIGHTPOSITIONRECTANGLEY,SettingsFrame.GOALWIDTHRECTANGLE,SettingsFrame.GOALHEIGHTRECTANGLE);
         leftGoal.setFill(Color.WHITE);
         rightGoal.setFill(Color.WHITE);
         line = new Line(Settings.FRAMEWIDTH/2, 0,   Settings.FRAMEWIDTH/2, Settings.FRAMEHEIGHT);

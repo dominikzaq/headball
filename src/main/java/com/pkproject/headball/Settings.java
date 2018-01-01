@@ -6,12 +6,12 @@ public class Settings {
     public static final int FRAMEHEIGHT = 600;
     public static final int FRAMEWIDTH = 1200;
 
-    public static final int POSITIONPLAYER1X = 80;
-    public static final int POSITIONPLAYER1Y = 500;
+    public static final int POSITIONPLAYER1X = SettingsFrame.GOALWIDTHRECTANGLE * 2 ;
+    public static final int POSITIONPLAYER1Y =  FRAMEHEIGHT / 2;
 
 
-    public static final int POSITIONPLAYER2X = 500;
-    public static final int POSITIONPLAYER2Y = 500;
+    public static final int POSITIONPLAYER2X = FRAMEWIDTH - SettingsFrame.GOALWIDTHRECTANGLE * 2 ;
+    public static final int POSITIONPLAYER2Y = FRAMEHEIGHT / 2;
 
 
     public static final int VECOLITYPLAYERX = 40;
@@ -22,9 +22,6 @@ public class Settings {
 
     public static final int VECOLITYBALLX = 80;
     public static final int VECOLITYBALLY = 50;
-
-    public static final String URL = "anim-0.png";
-
 
    // public static final int VECOLITYBALLY = 50;
 
