@@ -3,18 +3,22 @@ package com.pkproject.headball;
 import javafx.scene.shape.Circle;
 
 public class CollisionImpl implements Collision {
+    private Frame frame;
+
+    CollisionImpl() {
+        frame = new Frame();
+    }
     @Override
     public void checkCollisionWithGoal(Ball ball, Player player) {
-        playerWithGoal(player);
         ballWithGoal(ball);
     }
 
-    public void playerWithGoal(Player player) {
-        Circle p = player.getPlayerBall();
-        /*if(p.intersects(bo)) {
-
-        }*/
-
+    public boolean checkCollisionPlayerWithGoal(Player player) {
+        Circle pl = player.getPlayerBall();
+        if(pl.intersects(frame.getLeftGoal().getBoundsInLocal())) {
+            return true;
+        }
+        return false;
     }
 
     public void ballWithGoal(Ball ball) {

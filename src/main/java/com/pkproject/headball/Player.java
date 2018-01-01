@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Player {
+    private Collision collision;
     private Circle ball;
     private Circle playerBall;
     private int playerBallRadius = 35;
@@ -30,6 +31,7 @@ public class Player {
         positionPlayer[1] = positionY;
         colorPlayer = color;
         ball = null;
+        collision = new CollisionImpl();
     }
 
     public void initBall() {
@@ -61,21 +63,29 @@ public class Player {
         checkCollisionWithFrameY(y);
         playerBall.setCenterY(positionPlayer[1]);
 
-        if(ball != null) {
+        if (ball != null) {
+            if (y > 0) ball.setCenterY(positionPlayer[1] + ball.getRadius() + playerBallRadius + 1);
+            else ball.setCenterY(positionPlayer[1] - ball.getRadius() - playerBallRadius - 1);
             ball.setCenterX(positionPlayer[0]);
-            ball.setCenterY(positionPlayer[1]);
         }
+
+
     }
 
     public void moveElementX(int x, Ball b) {
+        b.moveDirectionY = 0;
+        b.moveDirectionX = 0;
+
         positionPlayer[0] += x;
         checkCollisionWithFrameX(x);
-
         playerBall.setCenterX(positionPlayer[0]);
-        if(ball != null) {
-            ball.setCenterX(positionPlayer[0]);
+        if (ball != null) {
+            if (x > 0) ball.setCenterX(positionPlayer[0] + ball.getRadius() + playerBallRadius + 1);
+            else ball.setCenterX(positionPlayer[0] - ball.getRadius() - playerBallRadius - 1);
             ball.setCenterY(positionPlayer[1]);
         }
+
+
     }
 
     public Circle getPlayerBall() {
@@ -87,13 +97,15 @@ public class Player {
     }
 
     public void checkCollisionWithFrameX(int x) {
+
         if((positionPlayer[0]  >= Settings.FRAMEWIDTH) || (positionPlayer[0] <= 0) ){
             positionPlayer[0] -= x;
         }
     }
 
     public void checkCollisionWithFrameY(int y) {
-        if((positionPlayer[1]  >= Settings.FRAMEHEIGHT) || (positionPlayer[1] <= 0) ){
+
+        if((positionPlayer[1]  >= Settings.FRAMEHEIGHT) || (positionPlayer[1] <= 0)){
             positionPlayer[1] -= y;
         }
     }
@@ -103,22 +115,6 @@ public class Player {
     }
 
     public void checkCollisionWithBall(Ball ball) {
-
-    }
-
-    public void changePositionBallUP() {
-
-    }
-
-    public void changePositionBallDown() {
-
-    }
-
-    public void changePositionBallRigth() {
-
-    }
-
-    public void changePositionBallLeft() {
 
     }
 

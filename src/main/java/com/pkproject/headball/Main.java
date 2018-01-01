@@ -76,14 +76,43 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
             gc.fillRect(0,0, Settings.FRAMEWIDTH,Settings.FRAMEHEIGHT);
             checkCollisions();
 
+            for(int i = ball.shootBall; i < 15; i++)
+                ball.moveBall();
+
+        }
+    }
+
+    private void shoot(Player p) {
+        ball.moveDirectionY = 1;
+
+        ball.moveDirectionX=0;
+        ball.moveDirectionY=0;
+            ball.moveDirectionX = 1;
+        if(p.getBall() != null) {
+            p.shoot();
+            if(ball.getPositionBall()[0] == p.getPlayerBall().getCenterX() && ball.getPositionBall()[1] > p.getPlayerBall().getCenterY() )
+                ball.moveDirectionY = -1;
+
+            if(ball.getPositionBall()[0] == p.getPlayerBall().getCenterX() && ball.getPositionBall()[1] < p.getPlayerBall().getCenterY() )
+                ball.moveDirectionY = 1;
+
+            if(ball.getPositionBall()[1] == p.getPlayerBall().getCenterY() && ball.getPositionBall()[0] > p.getPlayerBall().getCenterX() )
+                ball.moveDirectionX = 1;
+            if(ball.getPositionBall()[1] == p.getPlayerBall().getCenterY() && ball.getPositionBall()[0] > p.getPlayerBall().getCenterX() )
+                ball.moveDirectionY = -1;
+
+
+
         }
     }
 
     void checkCollisions() {
         collision.checkCollisionsBallWithPlayer(ball, players);
         ball.getBall();
+
         players[0].getPlayerBall();
     }
+
 
     public void check() {
         for(Player p : players) {
@@ -111,8 +140,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                 case S: players[0].moveElementY(Settings.VECOLITYPLAYERY, ball);
                     break;
                 case SPACE:
-                    players[1].shoot();
-
+                    shoot(players[0]);
                     break;
                  //control second player
                 case UP: players[1].moveElementY(-Settings.VECOLITYPLAYERY, ball);
@@ -124,13 +152,12 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                 case DOWN: players[1].moveElementY(Settings.VECOLITYPLAYERY, ball);
                     break;
                 case P:
-                    players[1].shoot();
+                    shoot(players[0]);
                     break;
             }
         }
 
     };
-
 
     private EventHandler<KeyEvent> keyReleased = new EventHandler<KeyEvent>() {
 
