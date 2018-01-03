@@ -8,10 +8,12 @@ import javax.swing.text.GapContent;
 public class Ball {
     private Circle ball;
     private int ballRadius = 20;
-    int [] positionBall =  new int[2]; //first position of element x, second position of element y
-    public int shootBall = 15;
-    public int moveDirectionX = 0; //0 not moving 1 moving up -1 moving down
-    public int moveDirectionY = 0; //0 not moving 1 moving up -1 moving down
+    public int [] positionBall =  new int[2]; //first position of element x, second position of element y
+    public boolean shootBall = false;
+
+    //just move
+    public int moveDirectionX = 0; //0 not moving 1 right -1 moving left
+    public  int moveDirectionY = 0; //0 not moving 1 moving up -1 moving down
     /*
      * creating ball
      */
@@ -53,7 +55,8 @@ public class Ball {
         this.positionBall = positionBall;
     }
 
-    public void moveBall() {
+
+    public void checkPositionBall() {
         if(moveDirectionX < 0) {
             positionBall[0] += (-1)*Settings.VECOLITYBALLX;
         }
@@ -87,5 +90,18 @@ public class Ball {
 
     public void doRotate(Player player) {
 
+    }
+
+
+    public void setBall(Circle ball) {
+        this.ball = ball;
+    }
+
+    public void moveBallXY(int vecolityballX, int vecolityballY) {
+        positionBall[0] += vecolityballX * moveDirectionX;
+        positionBall[1] +=  moveDirectionY * vecolityballY;
+
+        ball.setCenterX(positionBall[0]);
+        ball.setCenterY(positionBall[1]);
     }
 }

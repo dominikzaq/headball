@@ -12,6 +12,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.Set;
+
 public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private AnimationTimer timer;
     private Canvas canvas;
@@ -75,35 +77,23 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
             gc.setFill( Color.GREEN);
             gc.fillRect(0,0, Settings.FRAMEWIDTH,Settings.FRAMEHEIGHT);
             checkCollisions();
-
-            for(int i = ball.shootBall; i < 15; i++)
-                ball.moveBall();
-
         }
     }
 
-    private void shoot(Player p) {
-        ball.moveDirectionY = 1;
-
-        ball.moveDirectionX=0;
-        ball.moveDirectionY=0;
-            ball.moveDirectionX = 1;
-        if(p.getBall() != null) {
-            p.shoot();
-            if(ball.getPositionBall()[0] == p.getPlayerBall().getCenterX() && ball.getPositionBall()[1] > p.getPlayerBall().getCenterY() )
-                ball.moveDirectionY = -1;
-
-            if(ball.getPositionBall()[0] == p.getPlayerBall().getCenterX() && ball.getPositionBall()[1] < p.getPlayerBall().getCenterY() )
-                ball.moveDirectionY = 1;
-
-            if(ball.getPositionBall()[1] == p.getPlayerBall().getCenterY() && ball.getPositionBall()[0] > p.getPlayerBall().getCenterX() )
-                ball.moveDirectionX = 1;
-            if(ball.getPositionBall()[1] == p.getPlayerBall().getCenterY() && ball.getPositionBall()[0] > p.getPlayerBall().getCenterX() )
-                ball.moveDirectionY = -1;
-
-
-
+    public void moveBallAfterShoot() {
+        for(int i = 0; i < 5; i++) {
+            ball.moveBallXY(Settings.VECOLITYBALLX, Settings.VECOLITYBALLY);
+            System.out.println("k2");
         }
+        ball.shootBall = false;
+        ball.moveDirectionX = 0;
+        ball.moveDirectionY = 0;
+    }
+
+    private void shoot(Player p) {
+        System.out.println(p.playerShoot);
+        if(p.playerShoot)
+            moveBallAfterShoot();
     }
 
     void checkCollisions() {
@@ -131,28 +121,30 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
             switch (event.getCode()) {
                 //control one player
                 case W:
-                    players[0].moveElementY(-Settings.VECOLITYPLAYERY, ball);
+                    players[0].moveElementY(-Settings.VECOLITYPLAYERY);
                 break;
-                case A: players[0].moveElementX(-Settings.VECOLITYPLAYERY, ball);
+                case A: players[0].moveElementX(-Settings.VECOLITYPLAYERY);
                     break;
-                case D: players[0].moveElementX(Settings.VECOLITYPLAYERY, ball);
+                case D: players[0].moveElementX(Settings.VECOLITYPLAYERY);
                     break;
-                case S: players[0].moveElementY(Settings.VECOLITYPLAYERY, ball);
+                case S: players[0].moveElementY(Settings.VECOLITYPLAYERY);
                     break;
                 case SPACE:
+                    players[0].shoot();
                     shoot(players[0]);
                     break;
                  //control second player
-                case UP: players[1].moveElementY(-Settings.VECOLITYPLAYERY, ball);
+                case UP: players[1].moveElementY(-Settings.VECOLITYPLAYERY);
                     break;
-                case LEFT: players[1].moveElementX(-Settings.VECOLITYPLAYERX, ball);
+                case LEFT: players[1].moveElementX(-Settings.VECOLITYPLAYERX);
                     break;
-                case RIGHT: players[1].moveElementX(Settings.VECOLITYPLAYERX, ball);
+                case RIGHT: players[1].moveElementX(Settings.VECOLITYPLAYERX);
                     break;
-                case DOWN: players[1].moveElementY(Settings.VECOLITYPLAYERY, ball);
+                case DOWN: players[1].moveElementY(Settings.VECOLITYPLAYERY);
                     break;
                 case P:
-                    shoot(players[0]);
+                    players[1].shoot();
+                    shoot(players[1]);
                     break;
             }
         }

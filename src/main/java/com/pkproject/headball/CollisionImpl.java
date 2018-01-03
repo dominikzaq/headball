@@ -30,7 +30,7 @@ public class CollisionImpl implements Collision {
     @Override
     public void checkCollisionsBallWithPlayer(Ball ball,Player [] players) {
         if(players[0].getBall() == null && ball.getBall().intersects(players[0].getPlayerBall().getBoundsInLocal())) {
-           players[0].setBall(ball.getBall());
+            players[0].setBall(ball);
             //player can hold ball
             if(players[1].getBall() != null) {
                 players[1].setBall(null);
@@ -38,7 +38,7 @@ public class CollisionImpl implements Collision {
         }
 
         if(players[1].getBall() == null && ball.getBall().intersects(players[1].getPlayerBall().getBoundsInLocal())) {
-            players[1].setBall(ball.getBall());
+            players[1].setBall(ball);
             //player can hold ball
             if(players[0].getBall() != null) {
                 players[0].setBall(null);
