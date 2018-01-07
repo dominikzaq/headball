@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 import java.util.Set;
 
 public class Main extends Application  /*implements EventHandler <KeyEvent> */{
+    private Score score;
     private AnimationTimer timer;
     private Canvas canvas;
     private Group root;
@@ -24,17 +26,23 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private Frame frame;
     private Collision collision;
     private GameCreator gameCreator;
-
+    private boolean turnOnButtons = false;
+    private Stage stage;
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
+        createObject();
+    }
+    public void createObject() {
+        gameCreator = new GameCreator();
         gameCreator = new GameCreator();
         ball = gameCreator.getBall();
         players = gameCreator.getPlayers();
         collision = new CollisionImpl();
+        score = new Score();
         stage.setTitle("football");
         initUI(stage);
     }
-
     private void initUI(Stage stage) {
         root = new Group();
         Scene scene = new Scene(root);
@@ -57,11 +65,12 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         scene.setOnKeyReleased(keyReleased);
 
         gc = canvas.getGraphicsContext2D();
+        gc.setFill( Color.GREEN);
+        gc.fillRect(0,0, Settings.FRAMEWIDTH,Settings.FRAMEHEIGHT);
+
 
         //start game
         timer = new MyTimer();
-        timer.start();
-
         stage.show();
     }
 
@@ -73,27 +82,51 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         }
 
         public void doHandle() {
+            if (score.checkEndGame()) {
+                gc.setFill(Color.GREEN);
+                gc.fillRect(0, 0, Settings.FRAMEWIDTH, Settings.FRAMEHEIGHT);
+                checkCollisions();
 
-            gc.setFill( Color.GREEN);
-            gc.fillRect(0,0, Settings.FRAMEWIDTH,Settings.FRAMEHEIGHT);
-            checkCollisions();
+                if (collision.checkCollisionsBallWithGoal(ball)) {
+                    System.out.println(players[0].playerShoot);
+                    System.out.println(players[1].playerShoot);
+
+                    if (players[0].getBall() != null) {
+                        players[0].setBall(null);
+                    }
+                    if (players[1].getBall() != null) {
+                        players[1].setBall(null);
+                    }
+
+                    gameCreator.restartGame(ball, players);
+                }
+            } else {
+               gameOverAlert();
+            }
+
         }
     }
 
+    public void gameOverAlert() {
+        Label label = new Label("Game over");
+        root.getChildren().add(label);
+        turnOnButtons = false;
+        System.out.println("end game");
+    }
+
     public void moveBallAfterShoot() {
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 10; i++)
             ball.moveBallXY(Settings.VECOLITYBALLX, Settings.VECOLITYBALLY);
-            System.out.println("k2");
-        }
-        ball.shootBall = false;
+
         ball.moveDirectionX = 0;
         ball.moveDirectionY = 0;
     }
 
     private void shoot(Player p) {
-        System.out.println(p.playerShoot);
-        if(p.playerShoot)
+        if(p.playerShoot) {
             moveBallAfterShoot();
+            p.playerShoot = false;
+        }
     }
 
     void checkCollisions() {
@@ -121,30 +154,39 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
             switch (event.getCode()) {
                 //control one player
                 case W:
-                    players[0].moveElementY(-Settings.VECOLITYPLAYERY);
+                    if(turnOnButtons)players[0].moveElementY(-Settings.VECOLITYPLAYERY);
                 break;
-                case A: players[0].moveElementX(-Settings.VECOLITYPLAYERY);
+                case A: if(turnOnButtons) players[0].moveElementX(-Settings.VECOLITYPLAYERY);
                     break;
-                case D: players[0].moveElementX(Settings.VECOLITYPLAYERY);
+                case D: if(turnOnButtons) players[0].moveElementX(Settings.VECOLITYPLAYERY);
                     break;
-                case S: players[0].moveElementY(Settings.VECOLITYPLAYERY);
+                case S: if(turnOnButtons)players[0].moveElementY(Settings.VECOLITYPLAYERY);
                     break;
                 case SPACE:
-                    players[0].shoot();
-                    shoot(players[0]);
+                    if(turnOnButtons) {
+                        players[0].shoot();
+                        shoot(players[0]);
+                    }
                     break;
                  //control second player
-                case UP: players[1].moveElementY(-Settings.VECOLITYPLAYERY);
+                case UP: if(turnOnButtons)players[1].moveElementY(-Settings.VECOLITYPLAYERY);
                     break;
-                case LEFT: players[1].moveElementX(-Settings.VECOLITYPLAYERX);
+                case LEFT: if(turnOnButtons)players[1].moveElementX(-Settings.VECOLITYPLAYERX);
                     break;
-                case RIGHT: players[1].moveElementX(Settings.VECOLITYPLAYERX);
+                case RIGHT: if(turnOnButtons)players[1].moveElementX(Settings.VECOLITYPLAYERX);
                     break;
-                case DOWN: players[1].moveElementY(Settings.VECOLITYPLAYERY);
+                case DOWN: if(turnOnButtons)players[1].moveElementY(Settings.VECOLITYPLAYERY);
                     break;
                 case P:
-                    players[1].shoot();
-                    shoot(players[1]);
+                    if(turnOnButtons) {
+                        players[1].shoot();
+                        shoot(players[1]);
+                        System.out.println(Ball.moveDirectionX + " " + Ball.moveDirectionY);
+                    }
+                    break;
+                case ENTER:
+                    timer.start();
+                    turnOnButtons = true;
                     break;
             }
         }

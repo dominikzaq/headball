@@ -8,22 +8,29 @@ public class CollisionImpl implements Collision {
     CollisionImpl() {
         frame = new Frame();
     }
+
     @Override
-    public void checkCollisionWithGoal(Ball ball, Player player) {
-        ballWithGoal(ball);
+    public void checkCollisionWithGoal(Ball ball, Player player1, Player player2) {
+        checkCollisionPlayerWithGoal(player1);
+        checkCollisionPlayerWithGoal(player2);
     }
 
+    @Override
     public boolean checkCollisionPlayerWithGoal(Player player) {
         Circle pl = player.getPlayerBall();
         if(pl.intersects(frame.getLeftGoal().getBoundsInLocal())) {
             return true;
         }
+
+        if(pl.intersects(frame.getRightGoal().getBoundsInLocal())) {
+            return true;
+        }
         return false;
     }
 
-    public void ballWithGoal(Ball ball) {
-        Circle b = ball.getBall();
 
+    @Override
+    public void checkCollisionWithGoal(Ball ball, Player player) {
 
     }
 
@@ -47,7 +54,18 @@ public class CollisionImpl implements Collision {
     }
 
     @Override
-    public void checkCollisionsBallWithGoal() {
+    public boolean checkCollisionsBallWithGoal(Ball ball) {
+        Circle b = ball.getBall();
+        if(b.intersects(frame.getLeftGoal().getBoundsInLocal())) {
+            Score.resultPlayer2 += 1;
+            return true;
+        }
 
+        if(b.intersects(frame.getRightGoal().getBoundsInLocal())) {
+            Score.resultPlayer1 += 1;
+            return true;
+        }
+        return false;
     }
+
 }

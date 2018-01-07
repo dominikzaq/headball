@@ -12,8 +12,8 @@ public class Ball {
     public boolean shootBall = false;
 
     //just move
-    public int moveDirectionX = 0; //0 not moving 1 right -1 moving left
-    public  int moveDirectionY = 0; //0 not moving 1 moving up -1 moving down
+    public static int moveDirectionX = 0; //0 not moving 1 right -1 moving left
+    public static int moveDirectionY = 0; //0 not moving 1 moving up -1 moving down
     /*
      * creating ball
      */
@@ -30,18 +30,20 @@ public class Ball {
         ball.setRadius(ballRadius);
         ball.setFill(Color.WHITE);
     }
+    public void setBall(int positionX, int positionY) {
+        positionBall[0] = positionX;
+        positionBall[1] = positionY;
+
+        ball.setCenterX(positionBall[0]);
+        ball.setCenterY(positionBall[1]);
+        ball.setRadius(ballRadius);
+        ball.setFill(Color.WHITE);
+    }
 
     public Circle getBall() {
         return ball;
     }
 
-    public void initFaillingBall() {
-
-    }
-
-    public void speedBall() {
-
-    }
 
     public boolean isGoal() {
         return false;
@@ -70,17 +72,17 @@ public class Ball {
         if(moveDirectionX > 0) {
             positionBall[1] += Settings.VECOLITYBALLY;
         }
-       // checkCollisionWithFrame(moveDirectionX, moveDirectionY);
+        checkCollisionWithFrame(moveDirectionX, moveDirectionY);
         ball.setCenterX(positionBall[0]);
         ball.setCenterY(positionBall[1]);
     }
 
 
     public void checkCollisionWithFrame(int x, int y) {
-        if(positionBall[0] <= 0) positionBall[0] -= x;
-        if(positionBall[0] >= Settings.FRAMEWIDTH) positionBall[0] -= x;
-        if(positionBall[1] <= 0) positionBall[0] -= y;
-        if(positionBall[1] >= Settings.FRAMEHEIGHT) positionBall[0] -= y;
+        if(positionBall[0] <= 0) positionBall[0] = ballRadius;
+        if(positionBall[0] >= Settings.FRAMEWIDTH) positionBall[0] = Settings.FRAMEWIDTH - ballRadius;
+        if(positionBall[1] <= 0) positionBall[1] = ballRadius;
+        if(positionBall[1] >= Settings.FRAMEHEIGHT) positionBall[0] = Settings.FRAMEHEIGHT - ballRadius;
     }
 
     //@Override
@@ -93,13 +95,12 @@ public class Ball {
     }
 
 
-    public void setBall(Circle ball) {
-        this.ball = ball;
-    }
+
 
     public void moveBallXY(int vecolityballX, int vecolityballY) {
-        positionBall[0] += vecolityballX * moveDirectionX;
-        positionBall[1] +=  moveDirectionY * vecolityballY;
+
+        positionBall[0] +=  (moveDirectionX * vecolityballX);
+        positionBall[1] +=  (moveDirectionY * vecolityballY);
 
         ball.setCenterX(positionBall[0]);
         ball.setCenterY(positionBall[1]);

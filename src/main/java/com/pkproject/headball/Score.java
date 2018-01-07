@@ -1,10 +1,9 @@
 package com.pkproject.headball;
 
 public class Score {
-
     public static int countScore = 0;
-    int resultPlayer1;
-    int resultPlayer2;
+    public static int resultPlayer1;
+    public static int resultPlayer2;
 
     public int getResultPlayer1() {
         return resultPlayer1;
@@ -24,8 +23,10 @@ public class Score {
 
     // if false game is not complete otherwise the end game
     public boolean checkEndGame() {
-        return countScore > 4;
+        return !(resultPlayer1 > 2 || resultPlayer2 > 2);
     }
-
+    public String whoWon() {
+        return resultPlayer1 > 2? "Player 1 won" : "Player 2 won";
+    }
     public void saveResult() { }
 }

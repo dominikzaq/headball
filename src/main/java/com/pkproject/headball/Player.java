@@ -6,7 +6,6 @@ import javafx.scene.shape.Circle;
 public class Player {
     private Collision collision;
     private Ball ball;
-    Circle circleBall;
     private Circle playerBall;
     private int playerBallRadius = 35;
     private Color colorPlayer;
@@ -27,15 +26,17 @@ public class Player {
 
     public void initBall() {
         playerBall = new Circle();
-        playerBall.setCenterX(positionPlayer[0]);
-        playerBall.setCenterY(positionPlayer[1]);
+        initRestartPlayerBall(positionPlayer[0], positionPlayer[1]);
         playerBall.setRadius(playerBallRadius);
         playerBall.setFill(colorPlayer);
     }
 
 
-    public void initFaillingBall() {
-
+    public void initRestartPlayerBall(int positionX, int positionY) {
+        positionPlayer[0] = positionX;
+        positionPlayer[1] = positionY;
+        playerBall.setCenterX(positionPlayer[0]);
+        playerBall.setCenterY(positionPlayer[1]);
     }
 
     public void setCenterX(int positionX) {
@@ -57,14 +58,15 @@ public class Player {
         if (ball != null) {
             if (y > 0) {
                 ball.getBall().setCenterY(positionPlayer[1] + ball.getBall().getRadius() + playerBallRadius + 1);
-                ball.moveDirectionX = -1;
+                Ball.moveDirectionY = 1;
             }
             else  {
                 ball.getBall().setCenterY(positionPlayer[1] - ball.getBall().getRadius() - playerBallRadius - 1);
-                ball.moveDirectionX = 1;
+                Ball.moveDirectionY = -1;
             }
             ball.getBall().setCenterX(positionPlayer[0]);
-            ball.moveDirectionY = 0;
+            Ball.moveDirectionX = 0;
+
         }
 
     }
@@ -74,20 +76,19 @@ public class Player {
         checkCollisionWithFrameX(x);
         playerBall.setCenterX(positionPlayer[0]);
 
+        //check collision
         if (ball != null) {
             if (x > 0) {
                 ball.getBall().setCenterX(positionPlayer[0] + ball.getBall().getRadius() + playerBallRadius + 1);
-                ball.moveDirectionX = 1;
+                Ball.moveDirectionX = 1;
             }
             else {
                 ball.getBall().setCenterX(positionPlayer[0] - ball.getBall().getRadius() - playerBallRadius - 1);
-                ball.moveDirectionX = -1;
+                Ball.moveDirectionX = -1;
             }
             ball.getBall().setCenterY(positionPlayer[1]);
-            ball.moveDirectionY = 0;
+            Ball.moveDirectionY = 0;
         }
-
-
     }
 
     public Circle getPlayerBall() {
@@ -99,35 +100,29 @@ public class Player {
     }
 
     public void checkCollisionWithFrameX(int x) {
+        if(positionPlayer[0]  >= Settings.FRAMEWIDTH)
+            positionPlayer[0] = Settings.FRAMEWIDTH - playerBallRadius;
 
-        if((positionPlayer[0]  >= Settings.FRAMEWIDTH) || (positionPlayer[0] <= 0) ){
-            positionPlayer[0] -= x;
-        }
+        if(positionPlayer[0] <= 0 )
+            positionPlayer[0] = playerBallRadius;
+
     }
 
     public void checkCollisionWithFrameY(int y) {
-
-        if((positionPlayer[1]  >= Settings.FRAMEHEIGHT) || (positionPlayer[1] <= 0)){
-            positionPlayer[1] -= y;
-        }
-    }
-
-    public void checkCollisionWithFrame() {
+        if(positionPlayer[1]  >= Settings.FRAMEHEIGHT)
+            positionPlayer[1] = Settings.FRAMEHEIGHT - playerBallRadius;
+        if(positionPlayer[1] <= 0)
+            positionPlayer[1] = playerBallRadius;
 
     }
 
-    public void checkCollisionWithBall(Ball ball) {
-
-    }
 
     public void shoot() {
-        playerShoot = true;
-       // ball.moveDirectionX =
         //we shoot when have ball
         if(ball != null) {
+            playerShoot = true;
             ball = null;
         }
-
     }
 
     public Ball getBall() {
