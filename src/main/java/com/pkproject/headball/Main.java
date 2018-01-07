@@ -3,14 +3,17 @@ package com.pkproject.headball;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.Set;
@@ -28,11 +31,13 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private GameCreator gameCreator;
     private boolean turnOnButtons = false;
     private Stage stage;
+
     @Override
     public void start(Stage stage) {
         this.stage = stage;
         createObject();
     }
+
     public void createObject() {
         gameCreator = new GameCreator();
         gameCreator = new GameCreator();
@@ -102,17 +107,36 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                 }
             } else {
                gameOverAlert();
+
+
             }
 
         }
     }
 
+
+
     public void gameOverAlert() {
-        Label label = new Label("Game over");
+        Label label = new Label("Game over" + score.whoWon());
+        label.setFont(new Font("Cambria", 50));
         root.getChildren().add(label);
+
         turnOnButtons = false;
-        System.out.println("end game");
+       /*
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Platform.exit();*/
     }
+
+
+
+
+
+
+
 
     public void moveBallAfterShoot() {
         for(int i = 0; i < 10; i++)

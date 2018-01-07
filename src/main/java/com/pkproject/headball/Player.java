@@ -63,6 +63,7 @@ public class Player {
             else  {
                 ball.getBall().setCenterY(positionPlayer[1] - ball.getBall().getRadius() - playerBallRadius - 1);
                 Ball.moveDirectionY = -1;
+
             }
             ball.getBall().setCenterX(positionPlayer[0]);
             Ball.moveDirectionX = 0;

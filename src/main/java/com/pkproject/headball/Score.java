@@ -25,7 +25,7 @@ public class Score {
     public boolean checkEndGame() {
         return !(resultPlayer1 > 2 || resultPlayer2 > 2);
     }
-    public String whoWon() {
+    public static String whoWon() {
         return resultPlayer1 > 2? "Player 1 won" : "Player 2 won";
     }
     public void saveResult() { }
