@@ -49,17 +49,13 @@ public class Client {
             }
 
             // creates the Thread to listen from the server
-           // new Client.ListenFromServer().start();
+            new Client.ListenFromServer().start();
             // Send our username to the server this is the only message that we
             // will send as a String. All other messages will be ChatMessage objects
             connection = true;
         }
         // success we inform the caller that it worked
         return true;
-    }
-
-    public void sendMessege(ServerClientMessage msg) throws IOException {
-        sOutput.writeObject(msg);
     }
 
     public boolean turnOnGame() {
@@ -72,14 +68,12 @@ public class Client {
         return true;
     }
 
-    public boolean turnOffGame() {
+    public  void exitGame() {
         try {
             sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     public void startGame() {
@@ -103,15 +97,15 @@ public class Client {
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
-                switch(cm.getType()) {
+               // System.out.println(cm.getType());
+               /* switch(cm.getType()) {
                     case ServerClientMessage.TURNONGAME:
                         stateGame.setStartGame(true);
                         break;
                     case ServerClientMessage.TURNOFFGAME:
                         stateGame.setEndGame(true);
                         break;
-                }
+                }*/
             }
         }
     }

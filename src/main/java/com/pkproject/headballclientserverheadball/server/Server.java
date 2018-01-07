@@ -40,20 +40,19 @@ public class Server {
             al.add(t);
             // wlaczenie watku dla nowego clienta
             t.start();
+        }
 
-            //close all connect
-            serverSocket.close();
-            for(int i = 0; i < al.size(); ++i) {
-                Server.ClientThread tc = al.get(i);
-                try {
-                    tc.sInput.close();
-                    tc.sOutput.close();
-                    tc.socket.close();
-                }
-                catch(IOException ioE) {
-                }
+        //close all connect
+        serverSocket.close();
+        for(int i = 0; i < al.size(); ++i) {
+            Server.ClientThread tc = al.get(i);
+            try {
+                tc.sInput.close();
+                tc.sOutput.close();
+                tc.socket.close();
             }
-
+            catch(IOException ioE) {
+            }
         }
 
     }
@@ -73,9 +72,9 @@ public class Server {
 
 
     class ClientThread extends Thread {
-        Socket socket;
-        ObjectInputStream sInput;
-        ObjectOutputStream sOutput;
+        private Socket socket;
+        private ObjectInputStream sInput;
+        private ObjectOutputStream sOutput;
         int id;
         ServerClientMessage cm;
 
@@ -101,21 +100,27 @@ public class Server {
 
                 try {
                     cm = (ServerClientMessage) sInput.readObject();
+                    writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));
+
                 } catch (IOException e) {
+                    System.out.println("Problem z odczytaniem wiadomosci od uzytkownika: ");
+
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
+                    System.out.println("Problem z odczytaniem wiadomosci od uzytkownika: ");
+
                     e.printStackTrace();
                 }
-                switch(cm.getType()) {
+               /* switch(cm.getType()) {
                     case ServerClientMessage.TURNONGAME:
                         writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));
                         break;
                     case ServerClientMessage.TURNOFFGAME:
                         writeMsg(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));
                         break;
-                }
+                }*/
             }
-
+            close();
         }
 
         private void writeMsg(ServerClientMessage serverClientMessage) {
