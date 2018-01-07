@@ -108,18 +108,50 @@ public class Server {
                 }
                 switch(cm.getType()) {
                     case ServerClientMessage.TURNONGAME:
+                        writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));
                         break;
                     case ServerClientMessage.TURNOFFGAME:
+                        writeMsg(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));
                         break;
                 }
             }
 
         }
+
+        private void writeMsg(ServerClientMessage serverClientMessage) {
+            if(socket.isConnected()) {
+                close();
+            }
+            try {
+                sOutput.writeObject(serverClientMessage);
+            }
+            catch(IOException e) {
+                System.out.println("Problem z wyslaniem wiadomosci przez server");
+            }
+        }
+
+
+        private void close() {
+            // probuj zamknac polaczenie
+            try {
+                if(sOutput != null) sOutput.close();
+            }
+            catch(Exception e) {}
+            try {
+                if(sInput != null) sInput.close();
+            }
+            catch(Exception e) {};
+            try {
+                if(socket != null) socket.close();
+            }
+            catch (Exception e) {}
+        }
     }
 
 
+
     public static void main(String[] args) throws IOException {
-        int portNumber = 1500;
+        int portNumber = 8080;
         Server server = new Server(portNumber);
         server.startServer();
     }
