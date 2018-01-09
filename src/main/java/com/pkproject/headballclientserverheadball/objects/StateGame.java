@@ -1,8 +1,13 @@
 package com.pkproject.headballclientserverheadball.objects;
 
 public class StateGame {
-    private boolean startGame = false;
-    private boolean endGame  = false;
+    public boolean startGame;
+    public boolean endGame;
+
+    public StateGame() {
+      startGame = false;
+      endGame = false;
+    }
 
     public boolean isStartGame() {
         return startGame;

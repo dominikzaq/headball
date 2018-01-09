@@ -4,7 +4,10 @@ import com.pkproject.headballclientserverheadball.Main;
 import com.pkproject.headballclientserverheadball.objects.StateGame;
 import com.pkproject.headballclientserverheadball.server.Server;
 import com.pkproject.headballclientserverheadball.server.ServerClientMessage;
+import com.pkproject.test.Employee;
+import com.sun.xml.internal.ws.client.ClientSchemaValidationTube;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,8 +20,7 @@ public class Client {
     private ObjectOutputStream sOutput;		// to write on the socket
     private Socket clientSocket;
     public boolean connection = false;
-    public Main main;
-    private StateGame stateGame;
+    public StateGame stateGame;
 
     public Client(StateGame stateGame) {
         this.stateGame = stateGame;
@@ -29,7 +31,7 @@ public class Client {
         {
             // try to connect to the server
             try {
-                clientSocket = new Socket(HOST, PORT);
+                clientSocket = new Socket(HOST, Server.portServer);
             }
             // if it failed not much I can so
             catch(Exception ec) {
@@ -42,6 +44,7 @@ public class Client {
             {
                 sInput  = new ObjectInputStream(clientSocket.getInputStream());
                 sOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+                ser();
             }
             catch (IOException eIO) {
                 System.out.println("Problem with createu Input/Output streams");
@@ -58,13 +61,18 @@ public class Client {
         return true;
     }
 
+    public void ser() {
+
+    }
     public boolean turnOnGame() {
         try {
             sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNONGAME));
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Erorr turn on game");
             return false;
         }
+        System.out.println(" send object");
         return true;
     }
 
@@ -76,37 +84,37 @@ public class Client {
         }
     }
 
-    public void startGame() {
-        try {
-            sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNONGAME));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     class ListenFromServer extends Thread {
-        ServerClientMessage cm;
-
-
+        private ServerClientMessage cm;
         public void run() {
-            while(true) {
-                try {
-                   cm = (ServerClientMessage) sInput.readObject();
+            System.out.println("[]"+stateGame.isStartGame());
+            System.out.println(stateGame);
+
+
+            try {
+                    cm = (ServerClientMessage) sInput.readObject();
+                }catch (EOFException e) {
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-               // System.out.println(cm.getType());
-               /* switch(cm.getType()) {
-                    case ServerClientMessage.TURNONGAME:
-                        stateGame.setStartGame(true);
-                        break;
-                    case ServerClientMessage.TURNOFFGAME:
-                        stateGame.setEndGame(true);
-                        break;
-                }*/
-            }
+                System.out.println(cm.getType() + "listen form serwer");
+                if(cm != null) {
+                    switch (cm.getType()) {
+                        case ServerClientMessage.TURNONGAME:
+                            stateGame.setStartGame(true);
+                            System.out.println("[]"+stateGame.isStartGame());
+                            break;
+                        case ServerClientMessage.TURNOFFGAME:
+                            stateGame.setEndGame(true);
+                            break;
+                    }
+
+
+                }
+
         }
     }
 }

@@ -8,6 +8,7 @@ import com.pkproject.headballclientserverheadball.objects.*;
 import com.pkproject.headballclientserverheadball.settings.Settings;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,6 +19,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private Score score;
@@ -38,12 +41,18 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     @Override
     public void start(Stage stage) {
         stateGame = new StateGame();
+        System.out.println(stateGame);
         client = new Client(stateGame);
-
         if(client.connectWithServer()) {
-            this.stage = stage;
-            createObject();
-            client.startGame();
+            if(client.turnOnGame()) {
+                System.out.println("czeck" + stateGame.isStartGame());
+                while(!stateGame.isStartGame()){System.out.println("k");}
+                this.stage = stage;
+                createObject();
+
+            }
+        } else {
+            System.out.println("error client");
         }
     }
 
@@ -116,8 +125,6 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                 }
             } else {
                gameOverAlert();
-
-
             }
 
         }
@@ -131,13 +138,18 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         root.getChildren().add(label);
 
         turnOnButtons = false;
+
+
+        if(stateGame.isEndGame()) {
+            Platform.exit();
+        }
        /*
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Platform.exit();*/
+        */
     }
 
 
@@ -217,6 +229,9 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                     if(stateGame.isStartGame()) {
                         timer.start();
                         turnOnButtons = true;
+                    }
+                    else {
+                        System.out.println("nie dziala");
                     }
                     break;
             }

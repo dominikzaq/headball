@@ -8,17 +8,17 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
+
     private static int uniqueConnectIdWithClient;
     // lista, trzymajaca w sobie wszystkich polaczonych uzytkownikow
     private ArrayList<Server.ClientThread> al;
     // numer portu ktory sluzy do polaczenia
-    private int portServer;
+    public static int portServer = 1111;
     // wlacz/wylacz server dla konkretnego uzytkownika
     private boolean keepGoing;
 
 
-    public Server(int port) {
-        this.portServer = port;
+    public Server() {
         // inicjalizacja arrayList dla listy clientow
         al = new ArrayList<Server.ClientThread>();
     }
@@ -37,9 +37,11 @@ public class Server {
             // utworzenie watku nowego clienta
             Server.ClientThread t = new Server.ClientThread(socket);
             // zapisanei go do listy
-            al.add(t);
+
+     al.add(t);
             // wlaczenie watku dla nowego clienta
             t.start();
+
         }
 
         //close all connect
@@ -57,6 +59,7 @@ public class Server {
 
     }
 
+
     //check which one user is disconnect
     synchronized void remove(int id) {
         // poszukaj w liscie ktory z uzytkownikow sie odlaczyl od servera
@@ -71,6 +74,7 @@ public class Server {
     }
 
 
+
     class ClientThread extends Thread {
         private Socket socket;
         private ObjectInputStream sInput;
@@ -80,7 +84,7 @@ public class Server {
 
         ClientThread(Socket socket) {
             // przypisanie unikalnego id
-            id = ++uniqueConnectIdWithClient;
+           // id = ++uniqueConnectIdWithClient;
             this.socket = socket;
             //utworzenie data streams
             System.out.println("Watek probuje utworzyc obiekt Input/Output Streams");
@@ -100,8 +104,9 @@ public class Server {
 
                 try {
                     cm = (ServerClientMessage) sInput.readObject();
-                    writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));
+                    sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNONGAME));
 
+                    System.out.print(cm.getType());
                 } catch (IOException e) {
                     System.out.println("Problem z odczytaniem wiadomosci od uzytkownika: ");
 
@@ -111,7 +116,8 @@ public class Server {
 
                     e.printStackTrace();
                 }
-               /* switch(cm.getType()) {
+/*
+                switch(cm.getType()) {
                     case ServerClientMessage.TURNONGAME:
                         writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));
                         break;
@@ -120,6 +126,8 @@ public class Server {
                         break;
                 }*/
             }
+
+            remove(id);
             close();
         }
 
@@ -155,9 +163,9 @@ public class Server {
 
 
 
+
     public static void main(String[] args) throws IOException {
-        int portNumber = 8080;
-        Server server = new Server(portNumber);
+        Server server = new Server();
         server.startServer();
     }
 
