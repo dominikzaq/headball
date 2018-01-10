@@ -13,4 +13,5 @@ public interface Collision {
     public void checkCollisionWithGoal(Ball ball, Player player1, Player player2);
 
     boolean checkCollisionPlayerWithGoal(Player player);
+    void checkCollisionsBallWithFrame(Ball ball);
 }

@@ -3,10 +3,11 @@ package com.pkproject.headballclientserverheadball.objects;
 public class StateGame {
     public boolean startGame;
     public boolean endGame;
-
+    public boolean running;
     public StateGame() {
       startGame = false;
       endGame = false;
+      running = false;
     }
 
     public boolean isStartGame() {
@@ -25,5 +26,11 @@ public class StateGame {
         this.endGame = endGame;
     }
 
+    public boolean isRunning() {
+        return running;
+    }
 
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
 }

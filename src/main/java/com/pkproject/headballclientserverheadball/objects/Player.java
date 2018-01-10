@@ -71,6 +71,7 @@ public class Player {
             ball.getBall().setCenterX(positionPlayer[0]);
             Ball.moveDirectionX = 0;
 
+
         }
 
     }

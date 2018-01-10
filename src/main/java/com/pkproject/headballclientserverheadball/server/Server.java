@@ -40,8 +40,8 @@ public class Server {
 
      al.add(t);
             // wlaczenie watku dla nowego clienta
-            t.start();
 
+            t.start();
         }
 
         //close all connect
@@ -104,7 +104,7 @@ public class Server {
 
                 try {
                     cm = (ServerClientMessage) sInput.readObject();
-                    sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNONGAME));
+                    //sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNONGAME));
 
                     System.out.print(cm.getType());
                 } catch (IOException e) {
@@ -116,15 +116,17 @@ public class Server {
 
                     e.printStackTrace();
                 }
-/*
                 switch(cm.getType()) {
                     case ServerClientMessage.TURNONGAME:
                         writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));
+                        System.out.println("writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));\n ");
+
                         break;
                     case ServerClientMessage.TURNOFFGAME:
                         writeMsg(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));
+                        System.out.println(" writeMsg(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));\n");
                         break;
-                }*/
+                }
             }
 
             remove(id);
@@ -132,7 +134,7 @@ public class Server {
         }
 
         private void writeMsg(ServerClientMessage serverClientMessage) {
-            if(socket.isConnected()) {
+            if(!socket.isConnected()) {
                 close();
             }
             try {
@@ -160,9 +162,6 @@ public class Server {
             catch (Exception e) {}
         }
     }
-
-
-
 
     public static void main(String[] args) throws IOException {
         Server server = new Server();

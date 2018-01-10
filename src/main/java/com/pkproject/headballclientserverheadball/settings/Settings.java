@@ -21,8 +21,8 @@ public class Settings {
     public static final int POSITIONBALLX = FRAMEWIDTH / 2;
     public static final int POSITIONBALLY = FRAMEHEIGHT / 2;
 
-    public static final int VECOLITYBALLX = 10;
-    public static final int VECOLITYBALLY = 10;
+    public static final int VECOLITYBALLX = 15;
+    public static final int VECOLITYBALLY = 15;
 
    // public static final int VECOLITYBALLY = 50;
 

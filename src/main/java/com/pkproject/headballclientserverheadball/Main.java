@@ -37,6 +37,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private Stage stage;
     public Client client;
     public StateGame stateGame;
+    private Label scoreLabel;
 
     @Override
     public void start(Stage stage) {
@@ -66,6 +67,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         stage.setTitle("football");
         initUI(stage);
     }
+
     private void initUI(Stage stage) {
         root = new Group();
         Scene scene = new Scene(root);
@@ -91,7 +93,10 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         gc.setFill( Color.GREEN);
         gc.fillRect(0,0, Settings.FRAMEWIDTH,Settings.FRAMEHEIGHT);
 
-
+        //add result
+        scoreLabel = new Label();
+        scoreLabel.setFont(new Font("Cambria", 50));
+        root.getChildren().add(scoreLabel);
         //start game
         timer = new MyTimer();
         stage.show();
@@ -109,7 +114,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                 gc.setFill(Color.GREEN);
                 gc.fillRect(0, 0, Settings.FRAMEWIDTH, Settings.FRAMEHEIGHT);
                 checkCollisions();
-
+                collision.checkCollisionsBallWithFrame(ball);
                 if (collision.checkCollisionsBallWithGoal(ball)) {
                     System.out.println(players[0].playerShoot);
                     System.out.println(players[1].playerShoot);
@@ -120,8 +125,11 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                     if (players[1].getBall() != null) {
                         players[1].setBall(null);
                     }
-
                     gameCreator.restartGame(ball, players);
+
+
+                    scoreLabel.setText("Score Player1 " + score.getResultPlayer1() + " : Player2" + score.getResultPlayer2());
+
                 }
             } else {
                gameOverAlert();
@@ -131,28 +139,18 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     }
 
 
-
     public void gameOverAlert() {
-        Label label = new Label("Game over" + score.whoWon());
-        label.setFont(new Font("Cambria", 50));
-        root.getChildren().add(label);
-
-        turnOnButtons = false;
-
-
-        if(stateGame.isEndGame()) {
-            Platform.exit();
+        if(stateGame.isRunning()) {
+            scoreLabel.setText("");
+            Label label = new Label("Game over: " + score.whoWon());
+            label.setFont(new Font("Cambria", 50));
+            root.getChildren().add(label);
+            turnOnButtons = false;
+            stateGame.setRunning(false);
+            client.exitGame();
         }
-       /*
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        */
+
     }
-
-
 
 
     public void moveBallAfterShoot() {
@@ -177,15 +175,6 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         players[0].getPlayerBall();
     }
 
-
-    public void check() {
-        for(Player p : players) {
-            if(p.getBall() != null) {
-               // p.setCenterX(p.getPlayerBall()[0]);
-              //  p.setCenterY();
-            }
-        }
-    }
 
     private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
 
@@ -229,9 +218,17 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                     if(stateGame.isStartGame()) {
                         timer.start();
                         turnOnButtons = true;
+                        stateGame.setStartGame(false);
+                        stateGame.setRunning(true);
                     }
                     else {
                         System.out.println("nie dziala");
+                    }
+                    break;
+                case ESCAPE:
+                    System.out.println("escape " + stateGame.isEndGame());
+                    if(stateGame.isEndGame()) {
+                        Platform.exit();
                     }
                     break;
             }

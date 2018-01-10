@@ -4,6 +4,7 @@ import com.pkproject.headballclientserverheadball.objects.Ball;
 import com.pkproject.headballclientserverheadball.objects.Frame;
 import com.pkproject.headballclientserverheadball.objects.Player;
 import com.pkproject.headballclientserverheadball.objects.Score;
+import com.pkproject.headballclientserverheadball.settings.Settings;
 import javafx.scene.shape.Circle;
 
 public class CollisionImpl implements Collision {
@@ -36,6 +37,14 @@ public class CollisionImpl implements Collision {
     @Override
     public void checkCollisionWithGoal(Ball ball, Player player) {
 
+    }
+
+
+    public void checkCollisionsBallWithFrame(Ball ball) {
+        if(ball.positionBall[0] <= 0) ball.positionBall[0] = ball.ballRadius;
+        if(ball.positionBall[0] >= Settings.FRAMEWIDTH) ball.positionBall[0] = Settings.FRAMEWIDTH - ball.ballRadius;
+        if(ball.positionBall[1] <= 0) ball.positionBall[1] = ball.ballRadius;
+        if(ball.positionBall[1] >= Settings.FRAMEHEIGHT) ball.positionBall[1] = Settings.FRAMEHEIGHT - ball.ballRadius;
     }
 
     @Override

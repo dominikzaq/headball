@@ -1,12 +1,8 @@
 package com.pkproject.headballclientserverheadball.client;
 
-import com.pkproject.headballclientserverheadball.Main;
 import com.pkproject.headballclientserverheadball.objects.StateGame;
 import com.pkproject.headballclientserverheadball.server.Server;
 import com.pkproject.headballclientserverheadball.server.ServerClientMessage;
-import com.pkproject.test.Employee;
-import com.sun.xml.internal.ws.client.ClientSchemaValidationTube;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Client {
-    private static final int PORT = 8080;
     private static final String HOST = "localhost";
     private ObjectInputStream sInput;		// to read from the socket
     private ObjectOutputStream sOutput;		// to write on the socket
@@ -44,8 +39,8 @@ public class Client {
             {
                 sInput  = new ObjectInputStream(clientSocket.getInputStream());
                 sOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-                ser();
             }
+
             catch (IOException eIO) {
                 System.out.println("Problem with createu Input/Output streams");
                 return false;
@@ -61,9 +56,7 @@ public class Client {
         return true;
     }
 
-    public void ser() {
 
-    }
     public boolean turnOnGame() {
         try {
             sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNONGAME));
@@ -76,12 +69,15 @@ public class Client {
         return true;
     }
 
-    public  void exitGame() {
+    public  boolean exitGame() {
         try {
+            System.out.println("turn off game");
             sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     class ListenFromServer extends Thread {
@@ -90,10 +86,10 @@ public class Client {
             System.out.println("[]"+stateGame.isStartGame());
             System.out.println(stateGame);
 
-
-            try {
+           while(true) {
+                try {
                     cm = (ServerClientMessage) sInput.readObject();
-                }catch (EOFException e) {
+                } catch (EOFException e) {
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -101,20 +97,21 @@ public class Client {
                     e.printStackTrace();
                 }
                 System.out.println(cm.getType() + "listen form serwer");
-                if(cm != null) {
+                if (cm != null) {
                     switch (cm.getType()) {
                         case ServerClientMessage.TURNONGAME:
                             stateGame.setStartGame(true);
-                            System.out.println("[]"+stateGame.isStartGame());
+                            System.out.println("[]" + stateGame.isStartGame());
                             break;
                         case ServerClientMessage.TURNOFFGAME:
                             stateGame.setEndGame(true);
+                            System.out.println("[]" + stateGame.isEndGame());
                             break;
                     }
 
-
                 }
-
+         }
         }
+
     }
 }

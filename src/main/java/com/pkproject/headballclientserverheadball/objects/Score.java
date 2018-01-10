@@ -1,9 +1,10 @@
 package com.pkproject.headballclientserverheadball.objects;
 
+import com.pkproject.headballclientserverheadball.client.Client;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
+
 public class Score {
-    public static int countScore = 0;
-    private String namePlayer1;
-    private String namePlayer2;
     public static int resultPlayer1;
     public static int resultPlayer2;
 
