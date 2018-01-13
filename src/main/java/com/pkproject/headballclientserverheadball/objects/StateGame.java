@@ -4,6 +4,7 @@ public class StateGame {
     public boolean startGame;
     public boolean endGame;
     public boolean running;
+
     public StateGame() {
       startGame = false;
       endGame = false;

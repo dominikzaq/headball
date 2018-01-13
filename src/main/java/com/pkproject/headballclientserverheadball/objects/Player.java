@@ -14,6 +14,7 @@ public class Player {
     private Color colorPlayer;
     int[] positionPlayer = new int[2]; //first position of element x, second position of element y
     public boolean playerShoot = false;
+    public static int counterPlayer = 0;
 
     /*
      * creating ball
@@ -54,24 +55,26 @@ public class Player {
     }
 
     public void moveElementY(int y) {
+        int positionPlayerBallX;
+        int positionPlayerBallY;
+
         positionPlayer[1] += y;
         checkCollisionWithFrameY(y);
         playerBall.setCenterY(positionPlayer[1]);
 
         if (ball != null) {
             if (y > 0) {
-                ball.getBall().setCenterY(positionPlayer[1] + ball.getBall().getRadius() + playerBallRadius + 1);
+                positionPlayerBallY = (int) (positionPlayer[1] + ball.getBall().getRadius() + playerBallRadius + 1);
                 Ball.moveDirectionY = 1;
             }
             else  {
-                ball.getBall().setCenterY(positionPlayer[1] - ball.getBall().getRadius() - playerBallRadius - 1);
+                positionPlayerBallY = (int)(positionPlayer[1] - ball.getBall().getRadius() - playerBallRadius - 1);
                 Ball.moveDirectionY = -1;
 
             }
-            ball.getBall().setCenterX(positionPlayer[0]);
+            positionPlayerBallX = positionPlayer[0];
+            ball.setPositionBall(new int[]{positionPlayerBallX, positionPlayerBallY});
             Ball.moveDirectionX = 0;
-
-
         }
 
     }
@@ -80,18 +83,22 @@ public class Player {
         positionPlayer[0] += x;
         checkCollisionWithFrameX(x);
         playerBall.setCenterX(positionPlayer[0]);
-
+        int positionPlayerBallX;
+        int positionPlayerBallY;
+        //position football ball
         //check collision
         if (ball != null) {
             if (x > 0) {
-                ball.getBall().setCenterX(positionPlayer[0] + ball.getBall().getRadius() + playerBallRadius + 1);
+                positionPlayerBallX = (int) (positionPlayer[0] + ball.getBall().getRadius() + playerBallRadius + 1);
                 Ball.moveDirectionX = 1;
             }
             else {
-                ball.getBall().setCenterX(positionPlayer[0] - ball.getBall().getRadius() - playerBallRadius - 1);
+                positionPlayerBallX = (int) (positionPlayer[0] - ball.getBall().getRadius() - playerBallRadius - 1);
                 Ball.moveDirectionX = -1;
             }
-            ball.getBall().setCenterY(positionPlayer[1]);
+
+            positionPlayerBallY = positionPlayer[1];
+            ball.setPositionBall(new int[]{positionPlayerBallX, positionPlayerBallY});
             Ball.moveDirectionY = 0;
         }
     }
@@ -108,7 +115,7 @@ public class Player {
         if(positionPlayer[0]  >= Settings.FRAMEWIDTH)
             positionPlayer[0] = Settings.FRAMEWIDTH - playerBallRadius;
 
-        if(positionPlayer[0] <= 0 )
+        if(positionPlayer[0] <= 0)
             positionPlayer[0] = playerBallRadius;
 
     }
@@ -127,6 +134,7 @@ public class Player {
         if(ball != null) {
             playerShoot = true;
             ball = null;
+            Ball.counterShoot = 0;
         }
     }
 

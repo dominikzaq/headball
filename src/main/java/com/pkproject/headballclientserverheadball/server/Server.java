@@ -81,10 +81,11 @@ public class Server {
         private ObjectOutputStream sOutput;
         int id;
         ServerClientMessage cm;
+        boolean keepGoing = true;
 
         ClientThread(Socket socket) {
             // przypisanie unikalnego id
-           // id = ++uniqueConnectIdWithClient;
+            id = ++uniqueConnectIdWithClient;
             this.socket = socket;
             //utworzenie data streams
             System.out.println("Watek probuje utworzyc obiekt Input/Output Streams");
@@ -98,9 +99,9 @@ public class Server {
             }
         }
         public void run() {
-            boolean keepGoing = true;
+            boolean keepGoing2 = true;
 
-            while (keepGoing) {
+            while (keepGoing2) {
 
                 try {
                     cm = (ServerClientMessage) sInput.readObject();
@@ -109,22 +110,22 @@ public class Server {
                     System.out.print(cm.getType());
                 } catch (IOException e) {
                     System.out.println("Problem z odczytaniem wiadomosci od uzytkownika: ");
-
+                    keepGoing2 = false;
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     System.out.println("Problem z odczytaniem wiadomosci od uzytkownika: ");
-
+                    keepGoing2 = false;
                     e.printStackTrace();
                 }
                 switch(cm.getType()) {
                     case ServerClientMessage.TURNONGAME:
                         writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));
                         System.out.println("writeMsg(new ServerClientMessage(ServerClientMessage.TURNONGAME));\n ");
-
                         break;
                     case ServerClientMessage.TURNOFFGAME:
                         writeMsg(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));
                         System.out.println(" writeMsg(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));\n");
+                        keepGoing2 = false;
                         break;
                 }
             }
@@ -141,6 +142,7 @@ public class Server {
                 sOutput.writeObject(serverClientMessage);
             }
             catch(IOException e) {
+                keepGoing = false;
                 System.out.println("Problem z wyslaniem wiadomosci przez server");
             }
         }

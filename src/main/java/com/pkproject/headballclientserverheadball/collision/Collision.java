@@ -6,7 +6,7 @@ import com.pkproject.headballclientserverheadball.objects.Player;
 public interface Collision {
     public void checkCollisionWithGoal(Ball ball, Player player);
 
-    public void checkCollisionsBallWithPlayer(Ball ball, Player[] players);
+    public boolean checkCollisionsBallWithPlayer(Ball ball, Player[] players);
 
     public boolean checkCollisionsBallWithGoal(Ball ball);
 

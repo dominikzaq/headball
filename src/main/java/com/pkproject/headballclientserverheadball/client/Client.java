@@ -16,11 +16,21 @@ public class Client {
     private Socket clientSocket;
     public boolean connection = false;
     public StateGame stateGame;
-
+    public boolean keepGoing = true;
     public Client(StateGame stateGame) {
         this.stateGame = stateGame;
     }
     // we created new client
+
+
+    public boolean isKeepGoing() {
+        return keepGoing;
+    }
+
+    public void setKeepGoing(boolean keepGoing) {
+        this.keepGoing = keepGoing;
+    }
+
     public boolean connectWithServer() {
         if(!connection)
         {
@@ -53,9 +63,23 @@ public class Client {
             connection = true;
         }
         // success we inform the caller that it worked
-        return true;
+        return connection;
     }
 
+    public void closeConnectWithServer() {
+        try {
+            if(sInput != null) sInput.close();
+        }
+        catch(Exception e) {}
+        try {
+            if(sOutput != null) sOutput.close();
+        }
+        catch(Exception e) {}
+        try{
+            if(clientSocket != null) clientSocket.close();
+        }
+        catch(Exception e) {}
+    }
 
     public boolean turnOnGame() {
         try {
@@ -63,6 +87,7 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Erorr turn on game");
+            closeConnectWithServer();
             return false;
         }
         System.out.println(" send object");
@@ -75,6 +100,7 @@ public class Client {
             sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNOFFGAME));
         } catch (IOException e) {
             e.printStackTrace();
+            closeConnectWithServer();
             return false;
         }
         return true;
@@ -86,7 +112,7 @@ public class Client {
             System.out.println("[]"+stateGame.isStartGame());
             System.out.println(stateGame);
 
-           while(true) {
+           while(connection) {
                 try {
                     cm = (ServerClientMessage) sInput.readObject();
                 } catch (EOFException e) {
@@ -106,6 +132,7 @@ public class Client {
                         case ServerClientMessage.TURNOFFGAME:
                             stateGame.setEndGame(true);
                             System.out.println("[]" + stateGame.isEndGame());
+                            connection = false;
                             break;
                     }
 

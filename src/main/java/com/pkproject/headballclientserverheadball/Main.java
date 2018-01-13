@@ -113,8 +113,17 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
             if (score.checkEndGame()) {
                 gc.setFill(Color.GREEN);
                 gc.fillRect(0, 0, Settings.FRAMEWIDTH, Settings.FRAMEHEIGHT);
-                checkCollisions();
+
+                if(Ball.counterShoot < 10) {
+                    ball.moveBallXY(Settings.VECOLITYBALLX, Settings.VECOLITYBALLY);
+                    Ball.counterShoot++;
+                }
+
+                if(collision.checkCollisionsBallWithPlayer(ball, players))
+                    Ball.counterShoot = 10;
+
                 collision.checkCollisionsBallWithFrame(ball);
+
                 if (collision.checkCollisionsBallWithGoal(ball)) {
                     System.out.println(players[0].playerShoot);
                     System.out.println(players[1].playerShoot);
@@ -128,8 +137,8 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                     gameCreator.restartGame(ball, players);
 
 
-                    scoreLabel.setText("Score Player1 " + score.getResultPlayer1() + " : Player2" + score.getResultPlayer2());
-
+                    scoreLabel.setText("Score Player1 " + score.getResultPlayer1() + " : Player2 " + score.getResultPlayer2());
+                    Ball.counterShoot = 10;
                 }
             } else {
                gameOverAlert();
@@ -152,29 +161,11 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
 
     }
 
-
-    public void moveBallAfterShoot() {
-        for(int i = 0; i < 10; i++)
-            ball.moveBallXY(Settings.VECOLITYBALLX, Settings.VECOLITYBALLY);
-
-        ball.moveDirectionX = 0;
-        ball.moveDirectionY = 0;
-    }
-
     private void shoot(Player p) {
         if(p.playerShoot) {
-            moveBallAfterShoot();
             p.playerShoot = false;
         }
     }
-
-    void checkCollisions() {
-        collision.checkCollisionsBallWithPlayer(ball, players);
-        ball.getBall();
-
-        players[0].getPlayerBall();
-    }
-
 
     private EventHandler<KeyEvent> keyPressed = new EventHandler<KeyEvent>() {
 
@@ -228,7 +219,9 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                 case ESCAPE:
                     System.out.println("escape " + stateGame.isEndGame());
                     if(stateGame.isEndGame()) {
+                        timer.stop();
                         Platform.exit();
+                        client.closeConnectWithServer();
                     }
                     break;
             }
