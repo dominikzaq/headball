@@ -1,4 +1,4 @@
-package com.pkproject.headballclientserverheadball.objects;
+package com.pkproject.headball.objects;
 
 public class StateGame {
     public boolean startGame;

@@ -1,11 +1,9 @@
-package com.pkproject.headballclientserverheadball.collision;
+package com.pkproject.headball.collision;
 
-import com.pkproject.headballclientserverheadball.objects.Ball;
-import com.pkproject.headballclientserverheadball.objects.Player;
+import com.pkproject.headball.objects.Ball;
+import com.pkproject.headball.objects.Player;
 
 public interface Collision {
-    public void checkCollisionWithGoal(Ball ball, Player player);
-
     public boolean checkCollisionsBallWithPlayer(Ball ball, Player[] players);
 
     public boolean checkCollisionsBallWithGoal(Ball ball);

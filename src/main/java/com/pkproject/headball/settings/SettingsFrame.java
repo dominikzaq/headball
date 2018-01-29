@@ -1,6 +1,4 @@
-package com.pkproject.headballclientserverheadball.settings;
-
-import com.pkproject.headballclientserverheadball.settings.Settings;
+package com.pkproject.headball.settings;
 
 public class SettingsFrame {
     public static final int GOALHEIGHTRECTANGLE = 200;

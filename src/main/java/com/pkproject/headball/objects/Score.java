@@ -1,7 +1,6 @@
-package com.pkproject.headball;
+package com.pkproject.headball.objects;
 
 public class Score {
-    public static int countScore = 0;
     public static int resultPlayer1;
     public static int resultPlayer2;
 

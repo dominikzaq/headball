@@ -1,8 +1,6 @@
-package com.pkproject.headballclientserverheadball.objects;
+package com.pkproject.headball.objects;
 
-import com.pkproject.headballclientserverheadball.objects.Ball;
-import com.pkproject.headballclientserverheadball.objects.Player;
-import com.pkproject.headballclientserverheadball.settings.Settings;
+import com.pkproject.headball.settings.Settings;
 import javafx.scene.paint.Color;
 
 public class GameCreator {

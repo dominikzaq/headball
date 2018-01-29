@@ -1,10 +1,10 @@
-package com.pkproject.headballclientserverheadball.collision;
+package com.pkproject.headball.collision;
 
-import com.pkproject.headballclientserverheadball.objects.Ball;
-import com.pkproject.headballclientserverheadball.objects.Frame;
-import com.pkproject.headballclientserverheadball.objects.Player;
-import com.pkproject.headballclientserverheadball.objects.Score;
-import com.pkproject.headballclientserverheadball.settings.Settings;
+import com.pkproject.headball.objects.Ball;
+import com.pkproject.headball.objects.Frame;
+import com.pkproject.headball.objects.Player;
+import com.pkproject.headball.objects.Score;
+import com.pkproject.headball.settings.Settings;
 import javafx.scene.shape.Circle;
 
 public class CollisionImpl implements Collision {
@@ -32,13 +32,6 @@ public class CollisionImpl implements Collision {
 
         return false;
     }
-
-
-    @Override
-    public void checkCollisionWithGoal(Ball ball, Player player) {
-
-    }
-
 
     public void checkCollisionsBallWithFrame(Ball ball) {
         if(ball.positionBall[0] <= 0) {

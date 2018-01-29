@@ -1,4 +1,4 @@
-package com.pkproject.headballclientserverheadball.server;
+package com.pkproject.headball.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -105,8 +105,6 @@ public class Server {
 
                 try {
                     cm = (ServerClientMessage) sInput.readObject();
-                    //sOutput.writeObject(new ServerClientMessage(ServerClientMessage.TURNONGAME));
-
                     System.out.print(cm.getType());
                 } catch (IOException e) {
                     System.out.println("Problem z odczytaniem wiadomosci od uzytkownika: ");

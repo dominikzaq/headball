@@ -1,8 +1,8 @@
-package com.pkproject.headballclientserverheadball.client;
+package com.pkproject.headball.client;
 
-import com.pkproject.headballclientserverheadball.objects.StateGame;
-import com.pkproject.headballclientserverheadball.server.Server;
-import com.pkproject.headballclientserverheadball.server.ServerClientMessage;
+import com.pkproject.headball.objects.StateGame;
+import com.pkproject.headball.server.Server;
+import com.pkproject.headball.server.ServerClientMessage;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;

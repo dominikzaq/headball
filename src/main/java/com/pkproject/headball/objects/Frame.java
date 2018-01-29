@@ -1,7 +1,7 @@
-package com.pkproject.headballclientserverheadball.objects;
+package com.pkproject.headball.objects;
 
-import com.pkproject.headballclientserverheadball.settings.Settings;
-import com.pkproject.headballclientserverheadball.settings.SettingsFrame;
+import com.pkproject.headball.settings.Settings;
+import com.pkproject.headball.settings.SettingsFrame;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;

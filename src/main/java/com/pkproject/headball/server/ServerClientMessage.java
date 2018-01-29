@@ -1,9 +1,9 @@
-package com.pkproject.headballclientserverheadball.server;
+package com.pkproject.headball.server;
 
 import java.io.Serializable;
 
 public class ServerClientMessage implements Serializable{
-    public static final int TURNONGAME = 0, TURNOFFGAME = 1, ERORR = -1;
+    public static final int TURNONGAME = 0, TURNOFFGAME = 1;
     private int type;
 
     public ServerClientMessage(int type) {
@@ -13,5 +13,6 @@ public class ServerClientMessage implements Serializable{
     public int getType() {
         return type;
     }
+
 
 }

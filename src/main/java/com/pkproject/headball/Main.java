@@ -1,6 +1,11 @@
 package com.pkproject.headball;
 
 
+import com.pkproject.headball.client.Client;
+import com.pkproject.headball.collision.Collision;
+import com.pkproject.headball.collision.CollisionImpl;
+import com.pkproject.headball.objects.*;
+import com.pkproject.headball.settings.Settings;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -9,14 +14,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.util.Set;
 
 public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private Score score;
@@ -31,11 +33,26 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
     private GameCreator gameCreator;
     private boolean turnOnButtons = false;
     private Stage stage;
+    public Client client;
+    public StateGame stateGame;
+    private Label scoreLabel;
 
     @Override
     public void start(Stage stage) {
-        this.stage = stage;
-        createObject();
+        stateGame = new StateGame();
+        System.out.println(stateGame);
+        client = new Client(stateGame);
+        if(client.connectWithServer()) {
+            if(client.turnOnGame()) {
+                System.out.println("czeck" + stateGame.isStartGame());
+                while(!stateGame.isStartGame()){System.out.println("k");}
+                this.stage = stage;
+                createObject();
+
+            }
+        } else {
+            System.out.println("error client");
+        }
     }
 
     public void createObject() {
@@ -48,6 +65,7 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         stage.setTitle("football");
         initUI(stage);
     }
+
     private void initUI(Stage stage) {
         root = new Group();
         Scene scene = new Scene(root);
@@ -73,7 +91,10 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         gc.setFill( Color.GREEN);
         gc.fillRect(0,0, Settings.FRAMEWIDTH,Settings.FRAMEHEIGHT);
 
-
+        //add result
+        scoreLabel = new Label();
+        scoreLabel.setFont(new Font("Cambria", 50));
+        root.getChildren().add(scoreLabel);
         //start game
         timer = new MyTimer();
         stage.show();
@@ -90,7 +111,16 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
             if (score.checkEndGame()) {
                 gc.setFill(Color.GREEN);
                 gc.fillRect(0, 0, Settings.FRAMEWIDTH, Settings.FRAMEHEIGHT);
-                checkCollisions();
+
+                if(Ball.counterShoot < Settings.HITPOWERBALL) {
+                    ball.moveBallXY(Settings.VECOLITYBALLX, Settings.VECOLITYBALLY);
+                    Ball.counterShoot++;
+                }
+
+                if(collision.checkCollisionsBallWithPlayer(ball, players))
+                    Ball.counterShoot = Settings.HITPOWERBALL;
+
+                collision.checkCollisionsBallWithFrame(ball);
 
                 if (collision.checkCollisionsBallWithGoal(ball)) {
                     System.out.println(players[0].playerShoot);
@@ -102,71 +132,36 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                     if (players[1].getBall() != null) {
                         players[1].setBall(null);
                     }
-
                     gameCreator.restartGame(ball, players);
+
+
+                    scoreLabel.setText("Score Player1 " + score.getResultPlayer1() + " : Player2 " + score.getResultPlayer2());
+                    Ball.counterShoot = Settings.HITPOWERBALL;
                 }
             } else {
                gameOverAlert();
-
-
             }
 
         }
     }
 
 
-
     public void gameOverAlert() {
-        Label label = new Label("Game over" + score.whoWon());
-        label.setFont(new Font("Cambria", 50));
-        root.getChildren().add(label);
-
-        turnOnButtons = false;
-       /*
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(stateGame.isRunning()) {
+            scoreLabel.setText("");
+            Label label = new Label("Game over: " + score.whoWon());
+            label.setFont(new Font("Cambria", 50));
+            root.getChildren().add(label);
+            turnOnButtons = false;
+            stateGame.setRunning(false);
+            client.exitGame();
         }
-        Platform.exit();*/
-    }
 
-
-
-
-
-
-
-
-    public void moveBallAfterShoot() {
-        for(int i = 0; i < 10; i++)
-            ball.moveBallXY(Settings.VECOLITYBALLX, Settings.VECOLITYBALLY);
-
-        ball.moveDirectionX = 0;
-        ball.moveDirectionY = 0;
     }
 
     private void shoot(Player p) {
         if(p.playerShoot) {
-            moveBallAfterShoot();
             p.playerShoot = false;
-        }
-    }
-
-    void checkCollisions() {
-        collision.checkCollisionsBallWithPlayer(ball, players);
-        ball.getBall();
-
-        players[0].getPlayerBall();
-    }
-
-
-    public void check() {
-        for(Player p : players) {
-            if(p.getBall() != null) {
-               // p.setCenterX(p.getPlayerBall()[0]);
-              //  p.setCenterY();
-            }
         }
     }
 
@@ -209,8 +204,23 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
                     }
                     break;
                 case ENTER:
-                    timer.start();
-                    turnOnButtons = true;
+                    if(stateGame.isStartGame()) {
+                        timer.start();
+                        turnOnButtons = true;
+                        stateGame.setStartGame(false);
+                        stateGame.setRunning(true);
+                    }
+                    else {
+                        System.out.println("nie dziala");
+                    }
+                    break;
+                case ESCAPE:
+                    System.out.println("escape " + stateGame.isEndGame());
+                    if(stateGame.isEndGame()) {
+                        timer.stop();
+                        Platform.exit();
+                        client.closeConnectWithServer();
+                    }
                     break;
             }
         }
@@ -222,15 +232,14 @@ public class Main extends Application  /*implements EventHandler <KeyEvent> */{
         @Override
         public void handle(KeyEvent event) {
             switch (event.getCode()) {
-
-
-              //  case W: testPlayers[0].moveElementY(-Settings.VECOLITYPLAYERY); break;
-             //   case UP: testPlayers[1].moveElementY(-Settings.VECOLITYPLAYERY);break;
+               // case W: testPlayers[0].moveElementY(-Settings.VECOLITYPLAYERY); break;
+               // case UP: testPlayers[1].moveElementY(-Settings.VECOLITYPLAYERY);break;
             }
         }
     };
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }
