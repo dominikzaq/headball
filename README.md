@@ -1,4 +1,10 @@
 # headball game
+
+if you want start game: first run server, later run client!  
+
+
+
+
 Server/Client game
 
 
